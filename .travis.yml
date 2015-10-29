@@ -1,17 +1,14 @@
-addons:
-  apt:
-    packages:
-      - unixodbc-dev
-      - libsqliteodbc
 language: python
 python:
-  - "3.4"
+#  - "3.4"
   - "2.7"
   - "2.6"
 before_install:
   - sudo apt-get install unixodbc-dev
   - sudo apt-get install libsqliteodbc
+  - sudo updatedb
 install:
+  - locate libsqliteodbc.so
   - pip install -e .
 script:
   - if [[ $TRAVIS_PYTHON_VERSION == 2* ]]; then python tests2/sqlitetests.py 'Driver=/usr/lib/x86_64-linux-gnu/odbc/libsqliteodbc.so;Database=sqlite.db'; fi
