@@ -8,7 +8,6 @@ before_install:
   - sudo apt-get install libsqliteodbc
   - ls /usr/lib
 install:
-  - locate libsqliteodbc.so
   - pip install -e .
 script:
   - if [[ $TRAVIS_PYTHON_VERSION == 2* ]]; then python tests2/sqlitetests.py 'Driver=/usr/lib/libsqliteodbc.so;Database=sqlite.db'; fi
