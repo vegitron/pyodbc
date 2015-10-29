@@ -742,6 +742,8 @@ def main():
     testRunner = unittest.TextTestRunner(verbosity=options.verbose)
     result = testRunner.run(suite)
 
+    return result.wasSuccessful()
+
 
 if __name__ == '__main__':
 
@@ -750,4 +752,9 @@ if __name__ == '__main__':
     add_to_path()
 
     import pyodbc
-    main()
+    success = main()
+
+    if success:
+        exit(0)
+
+    exit(1)
