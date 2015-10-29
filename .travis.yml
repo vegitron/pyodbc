@@ -2,7 +2,7 @@ sudo: false
 addons:
   apt:
     packages:
-      - unixODBC-dev
+      - unixodbc-dev
       - libsqliteodbc
 language: python
 python:
