@@ -6,9 +6,9 @@ python:
 before_install:
   - sudo apt-get install unixodbc-dev
   - sudo apt-get install libsqliteodbc
-  - ls /usr/lib
+  - ls /usr/lib/odbc
 install:
   - pip install -e .
 script:
-  - if [[ $TRAVIS_PYTHON_VERSION == 2* ]]; then python tests2/sqlitetests.py 'Driver=/usr/lib/libsqliteodbc.so;Database=sqlite.db'; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == 3* ]]; then python tests3/sqlitetests.py 'Driver=/usr/lib/libsqliteodbc.so;Database=sqlite.db'; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 2* ]]; then python tests2/sqlitetests.py 'Driver=/usr/lib/odbc/libsqliteodbc.so;Database=sqlite.db'; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3* ]]; then python tests3/sqlitetests.py 'Driver=/usr/lib/odbc/libsqliteodbc.so;Database=sqlite.db'; fi
