@@ -6,7 +6,7 @@ python:
 before_install:
   - sudo apt-get install unixodbc-dev
   - sudo apt-get install libsqliteodbc
-  - sudo updatedb
+  - ls /usr/lib
 install:
   - locate libsqliteodbc.so
   - pip install -e .
