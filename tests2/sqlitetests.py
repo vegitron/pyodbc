@@ -664,7 +664,7 @@ class SqliteTestCase(unittest.TestCase):
         row = self.cursor.execute("select * from t1").fetchone()
         self.assertEqual(row.n, 1)
         self.assertEqual(type(row.b), bytearray)
-        self.assertEqual(row.b, value)
+        self.assertEqual(row.b, bytearray(value.encode('ascii')))
 
 
     def test_row_equal(self):
