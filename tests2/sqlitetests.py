@@ -128,6 +128,7 @@ class SqliteTestCase(unittest.TestCase):
         self.assert_(isinstance(value, int))
 
     # The value coming back is 8 bytes long :(
+    @unittest.skipIf(sys.version_info < (2, 6), "No expectedFailure")
     @unittest.expectedFailure
     def test_fixed_unicode(self):
         value = u"t\xebsting"
@@ -362,6 +363,7 @@ class SqliteTestCase(unittest.TestCase):
 
     # The value from the sqlite library is 0.  it would be nice if this
     # stopped being a failure.
+    @unittest.skipIf(sys.version_info < (2, 6), "No expectedFailure")
     @unittest.expectedFailure
     def test_rowcount_select(self):
         """
