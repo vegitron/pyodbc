@@ -7,7 +7,6 @@ before_install:
   - sudo apt-get install unixodbc-dev
   - sudo apt-get install libsqliteodbc
   - ls /usr/lib/odbc
-  - pip install unittest2
 install:
   - pip install -e .
 script:

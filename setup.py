@@ -100,6 +100,7 @@ def main():
                        ],
 
         'url': 'https://github.com/mkleehammer/pyodbc',
+        'install_requires': ['unittest2'],
         'cmdclass': { 'version' : VersionCommand,
                      'tags'    : TagsCommand }
         }
