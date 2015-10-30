@@ -991,6 +991,8 @@ static PyObject* Connection_exit(PyObject* self, PyObject* args)
         if (!SQL_SUCCEEDED(ret))
             return RaiseErrorFromHandle("SQLEndTran(SQL_COMMIT)", cnxn->hdbc, SQL_NULL_HANDLE);
     }
+
+    Connection_close(self, args);
     
     Py_RETURN_NONE;
 }
