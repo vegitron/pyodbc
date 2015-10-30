@@ -54,7 +54,7 @@ class SqliteTestCase(unittest.TestCase):
     LARGE_FENCEPOST_SIZES = [ 4095, 4096, 4097, 10 * 1024, 20 * 1024 ]
 
     ANSI_FENCEPOSTS    = [ _generate_test_string(size) for size in SMALL_FENCEPOST_SIZES ]
-    UNICODE_FENCEPOSTS = [ unicode(s) for s in ANSI_FENCEPOSTS ]
+    UNICODE_FENCEPOSTS = [ s for s in ANSI_FENCEPOSTS ]
     IMAGE_FENCEPOSTS   = ANSI_FENCEPOSTS + [ _generate_test_string(size) for size in LARGE_FENCEPOST_SIZES ]
 
     def __init__(self, method_name, connection_string):
@@ -151,6 +151,7 @@ class SqliteTestCase(unittest.TestCase):
         self.cursor.execute(sql)
         self.cursor.execute("insert into t1 values(?)", value)
         v = self.cursor.execute("select * from t1").fetchone()[0]
+
         self.assertEqual(type(v), type(value))
 
         if value is not None:
@@ -208,7 +209,7 @@ class SqliteTestCase(unittest.TestCase):
         locals()['test_text_%s' % len(value)] = _maketest(value)
 
     def test_text_upperlatin(self):
-        self._test_strtype('varchar', u'á')
+        self._test_strtype('varchar', 'á')
 
     #
     # blob
@@ -224,7 +225,7 @@ class SqliteTestCase(unittest.TestCase):
     # Generate a test for each fencepost size: test_unicode_0, etc.
     def _maketest(value):
         def t(self):
-            self._test_strtype('blob', buffer(value), len(value))
+            self._test_strtype('blob', bytearray(value), len(value))
         return t
     for value in ANSI_FENCEPOSTS:
         locals()['test_blob_%s' % len(value)] = _maketest(value)
@@ -641,7 +642,7 @@ class SqliteTestCase(unittest.TestCase):
         # text
         t = self.cursor.description[1]
         self.assertEqual(t[0], 's')
-        self.assertEqual(t[1], unicode)
+        self.assertEqual(t[1], str)
         self.assertEqual(t[5], 0)       # scale
         self.assertEqual(t[6], True)    # nullable
 
@@ -659,7 +660,7 @@ class SqliteTestCase(unittest.TestCase):
         self.cursor.execute("insert into t1 values (1, ?)", value)
         row = self.cursor.execute("select * from t1").fetchone()
         self.assertEqual(row.n, 1)
-        self.assertEqual(type(row.b), buffer)
+        self.assertEqual(type(row.b), bytearray)
         self.assertEqual(row.b, value)
 
 
@@ -692,6 +693,7 @@ class SqliteTestCase(unittest.TestCase):
         # The connection should be closed now.
         def test():
             cnxn.getinfo(pyodbc.SQL_DEFAULT_TXN_ISOLATION)
+
         self.assertRaises(pyodbc.ProgrammingError, test)
 
     def test_untyped_none(self):
