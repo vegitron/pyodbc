@@ -23,7 +23,7 @@ You can also put the connection string into a setup.cfg file in the root of the 
 """
 
 import sys, os, re
-import unittest
+import unittest2
 from decimal import Decimal
 from datetime import datetime, date, time
 from os.path import join, getsize, dirname, abspath
@@ -48,7 +48,7 @@ def _generate_test_string(length):
     v = _TESTSTR * c
     return v[:length]
 
-class SqliteTestCase(unittest.TestCase):
+class SqliteTestCase(unittest2.TestCase):
 
     SMALL_FENCEPOST_SIZES = [ 0, 1, 255, 256, 510, 511, 512, 1023, 1024, 2047, 2048, 4000 ]
     LARGE_FENCEPOST_SIZES = [ 4095, 4096, 4097, 10 * 1024, 20 * 1024 ]
@@ -58,7 +58,7 @@ class SqliteTestCase(unittest.TestCase):
     IMAGE_FENCEPOSTS   = ANSI_FENCEPOSTS + [ _generate_test_string(size) for size in LARGE_FENCEPOST_SIZES ]
 
     def __init__(self, method_name, connection_string):
-        unittest.TestCase.__init__(self, method_name)
+        unittest2.TestCase.__init__(self, method_name)
         self.connection_string = connection_string
 
     def get_sqlite_version(self):
@@ -128,8 +128,7 @@ class SqliteTestCase(unittest.TestCase):
         self.assert_(isinstance(value, int))
 
     # The value coming back is 8 bytes long :(
-    @unittest.skipIf(sys.version_info < (2, 6), "No expectedFailure")
-    @unittest.expectedFailure
+    @unittest2.expectedFailure
     def test_fixed_unicode(self):
         value = u"t\xebsting"
         self.cursor.execute("create table t1(s nchar(7))")
@@ -231,7 +230,7 @@ class SqliteTestCase(unittest.TestCase):
     # sqlite3.ProgrammingError: Incorrect number of bindings supplied.
     # The current statement uses 1, and there are 0 supplied.
     def _maketest(value):
-        @unittest.skipIf(len(value) == 0, "Doesn't work!")
+        @unittest2.skipIf(len(value) == 0, "Doesn't work!")
         def t(self):
             self._test_strtype('blob', bytearray(value), len(value))
         return t
@@ -363,8 +362,7 @@ class SqliteTestCase(unittest.TestCase):
 
     # The value from the sqlite library is 0.  it would be nice if this
     # stopped being a failure.
-    @unittest.skipIf(sys.version_info < (2, 6), "No expectedFailure")
-    @unittest.expectedFailure
+    @unittest2.expectedFailure
     def test_rowcount_select(self):
         """
         Ensure Cursor.rowcount is set properly after a select statement.
@@ -753,7 +751,7 @@ def main():
 
     suite = load_tests(SqliteTestCase, options.test, connection_string)
 
-    testRunner = unittest.TextTestRunner(verbosity=options.verbose)
+    testRunner = unittest2.TextTestRunner(verbosity=options.verbose)
     result = testRunner.run(suite)
 
     return result.wasSuccessful()
